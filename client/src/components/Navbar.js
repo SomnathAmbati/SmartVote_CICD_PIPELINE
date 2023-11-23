@@ -1,83 +1,81 @@
-import React,{useContext} from 'react'
-import {Link ,useHistory} from 'react-router-dom'
-import {UserContext} from '../App'
+// NavBar.js
+import React, { useContext } from 'react';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import { UserContext } from '../App';
 
-const NavBar = ()=>{
-    
-     const history = useHistory()
-     const {state,dispatch} = useContext(UserContext)
-     const currentUser = localStorage.getItem("currentUser")
+const NavBar = () => {
+  const history = useHistory();
+  const { state, dispatch } = useContext(UserContext);
+  const location = useLocation();
 
-     console.log("currentUser",currentUser)
+  const handleLogout = () => {
+    localStorage.clear();
+    dispatch({ type: "CLEAR" });
+    history.push('/signin');
+  };
 
-    //  const renderList = ()=>{
-     
-    //    if(state){
-    //        return [
-            
-            
-    //         <li key="3"
-    //          style={{fontSize:"20px",fontWeight:"600",color:"white",backgroundColor:"grey"}}
-    //         onClick={()=>{
-    //           localStorage.clear()
-    //           dispatch({type:"CLEAR"})
-    //           history.push('/signin')
-    //         }}
-    //         >
-    //             Logout
-           
-    //         </li>
-         
-            
-    //        ]
-    //    }else{
-    //      return [
-    //       // <li key="4"><Link to="/signin" style={{fontSize:"20px",fontWeight:"600"}}>Signin</Link></li>,
-    //       // <li key="5"><Link to="/signup" style={{fontSize:"20px",fontWeight:"600"}}>Signup</Link></li>
-    //      ]
-    //    }
-    //  }
-    return(
-        <nav className='navbar navbar-dark bg-success'>
-        <div className="nav-wrapper blue" style={{display:"flex",flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
-           
-           <div >
-           <Link to={state?"/":"/signin"} className="brand-logo center" 
-          style={{color:"white",fontSize:"30px",textDecoration:"none",fontFamily:"Acme"}}>Online Voting System</Link>
-           </div>
-           <div style={{marginLeft:"60px"}}>
-           {state && state.isAdmin &&  (
-              <li 
-              style={{fontSize:"22px",fontWeight:"600",color:"white",float:"right",listStyleType:"none",}}
-             
-             >
-              <Link to="/result" style={{color:"white",textDecoration:"none",fontSize:"20px",fontWeight:"600"}}>
-              <i className="fas fa-poll"></i> {" "}Result</Link>
-            
-             </li>
-             
-           )}
-           </div>
-           <div style={{marginLeft:"60px"}}>
-           {state && (
-              <li 
-              style={{fontSize:"22px",fontWeight:"600",color:"white",float:"right",listStyleType:"none",}}
-             onClick={()=>{
-               localStorage.clear()
-               dispatch({type:"CLEAR"})
-               history.push('/signin')
-             }}
-             >
-               <i className="far fa-sign-out "></i> {" "} Logout
-            
-             </li>
-           )}
-           </div>
-         
+  return (
+    <nav className='navbar navbar-dark' style={{ display: "grid", gridTemplateRows: "1fr", backgroundColor: "#36454F" }}>
+      <div className="nav-wrapper" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "center" }}>
+
+        <div>
+          <Link to={state ? "/" : "/signin"} className="brand-logo center"
+            style={{ color: "white", marginLeft: "6px", fontSize: "30px", textDecoration: "none", fontFamily: "Railway" }}>
+            Online Voting System
+          </Link>
         </div>
-      </nav>
-    )
+
+        <div style={{ display: "flex", alignItems: "center", marginLeft: "350px" }}>
+          {state && state.isAdmin && (
+            <>
+              <li style={{ fontSize: "24px", fontWeight: "600", color: "white", listStyleType: "none", marginRight: "22px" }}>
+                <Link to="/result" style={{ color: "white", textDecoration: "none", fontSize: "18px", fontWeight: "600", fontFamily: "Railway" }}>
+                  <i className="fas fa-poll"></i> {" "} Result
+                </Link>
+              </li>
+              <li style={{ fontSize: "24px", fontWeight: "600", color: "white", listStyleType: "none", marginRight: "22px" }}>
+                <Link to="/Chart" style={{ color: "white", textDecoration: "none", fontSize: "18px", fontWeight: "600", fontFamily: "Railway" }}>
+                  <i className="fas fa-chart-pie"></i> {" "} Chart
+                </Link>
+              </li>
+              <li style={{ fontSize: "24px", fontWeight: "600", color: "white", listStyleType: "none", marginRight: "22px" }}>
+                <Link to="/PostTable" style={{ color: "white", textDecoration: "none", fontSize: "18px", fontWeight: "600", fontFamily: "Railway" }}>
+                  <i className="fas fa-wrench"></i> {" "} Update_Posts
+                </Link>
+              </li>
+            </>
+          )}
+
+          {state ? (
+            <li style={{ fontSize: "20px", fontWeight: "600", color: "white", listStyleType: "none", cursor: "pointer", fontFamily: "Railway", marginRight: "22px" }}
+              onClick={handleLogout}>
+              <i className="far fa-sign-out "></i> {" "} Logout
+            </li>
+          ) : (
+            <>
+              {(location.pathname === '/signin' || location.pathname === '/signup') && (
+                <div style={{ display: "flex", marginLeft: "auto" }}>
+                  <Link to="/Start" style={{ fontSize: "23px", fontWeight: "600", color: 'white', marginRight: "22px", fontFamily: "Railway" }}>Home</Link>
+                  <Link to="/signin" style={{ fontSize: "23px", fontWeight: "600", color: 'white', marginRight: "22px", fontFamily: "Railway" }}>Signin</Link>
+                  <Link to="/signup" style={{ fontSize: "23px", fontWeight: "600", color: 'white', fontFamily: "Railway", marginRight: "22px" }}>Signup</Link>
+                </div>
+              )}
+
+              {/* Add the buttons for the Start page */}
+              {location.pathname === '/Start' && (
+                <div style={{ display: "grid",position: "relative", marginLeft: "-25%" }}>
+                  <Link to="/signin" style={{ fontSize: "23px", fontWeight: "600", color: 'white', fontFamily: "Railway"}}>Login/Register</Link>
+
+                </div>
+              )}
+
+            </>
+          )}
+        </div>
+
+      </div>
+    </nav>
+  );
 }
 
-
-export default NavBar
+export default NavBar;

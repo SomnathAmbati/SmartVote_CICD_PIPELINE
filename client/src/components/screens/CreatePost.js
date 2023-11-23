@@ -17,14 +17,12 @@ const CretePost = ()=>{
     
     data.map(item => {
         total += (item.votes.length);
-    })
+    });
     
-  
 
- 
 
    return(
-  
+
 
     <div>
         <table style={{width:"80%",marginTop:"50px",marginLeft:"10%"}}>
@@ -44,7 +42,7 @@ const CretePost = ()=>{
                    <td>{item.title}</td>
                 
                   <td>
-                  <img src={item.photo} 
+                  <img src={item.photo} alt=''
                                 style={{width:"150px",height:"150px",paddingTop:"10px",paddingBottom:"10px"}}
                                 />
                   </td>
@@ -62,4 +60,4 @@ const CretePost = ()=>{
 }
 
 
-export default CretePost
+export default CretePost;

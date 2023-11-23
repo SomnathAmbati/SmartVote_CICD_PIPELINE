@@ -1,5 +1,6 @@
 import React,{useState,useEffect} from 'react';
 import {Bar,Line,Pie} from 'react-chartjs-2';
+
 const Chart = () => {
    // const [data,setData]= useState([]);
 
@@ -9,7 +10,7 @@ const Chart = () => {
     const[datasets,setDatesets]= useState(
         [
                 {
-                  label: 'Covid-19',
+                  label: 'Votings',
                  
                   backgroundColor: [
                     '#B21F00','#161750','#12BD93 ','#57BD12 '
@@ -45,15 +46,15 @@ const Chart = () => {
   return (
         <div>
 
-        
+
         <div style={{height:"400px",width:"60%",marginBottom:"50px",marginTop:"50px",marginLeft:"20%"}}>
           <Pie
             data={statedata}
             options={{
               title:{
                 display:true,
-                text:'Covid-19 active case',
-                fontSize:20
+                text:'Voting',
+                fontSize:23
               },
               legend:{
                 display:true,

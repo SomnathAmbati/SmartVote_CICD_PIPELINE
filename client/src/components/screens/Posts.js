@@ -23,7 +23,7 @@ const Posts  = ()=>{
        
            
             <p style={{textAlign:"center"}}><b >{item.title.split(" ")[0]}</b></p>
-            <img src={item.photo} style={{height:"130px",width:"140px",marginLeft:"31px",borderRadius:"10%"}} />
+            <img src={item.photo} alt='' style={{height:"130px",width:"140px",marginLeft:"31px",borderRadius:"10%"}} />
                  
             {/* <p style={{textAlign:"center"}}><b >{item.votes.length > 1 ?  item.votes.length  + " votes" :  + item.votes.length + " vote" }</b></p> */}
             </div>
@@ -41,4 +41,4 @@ const Posts  = ()=>{
 }
 
 
-export default Posts
+export default Posts;

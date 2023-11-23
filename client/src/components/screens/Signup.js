@@ -18,11 +18,11 @@ const SignUp  = ()=>{
     },[url])
     const uploadPic = () => {
         const data = new FormData();
-        data.append("file", image);
-        data.append("upload_preset", "voting");
-        data.append("cloud_name", "dvfpkko1z");
-        fetch("https://api.cloudinary.com/v1_1/dvfpkko1z/image/upload", {
-          method: "post",
+        data.append('file', image);
+        data.append('upload_preset', 'Project');
+        data.append('cloud_name', 'dfebaqo69');
+        fetch('https://api.cloudinary.com/v1_1/dfebaqo69/image/upload', {
+          method: 'post',
           body: data,
         })
           .then((res) => res.json())
@@ -73,7 +73,7 @@ const SignUp  = ()=>{
     }
 
    return (
-      <div className="mycard" style={{width:"35%",marginLeft:"30%"}}>
+      <div className="mycard" style={{width:"35%",marginLeft:"30%", height: "100%"}}>
           <div className="card auth-card input-field">
             <p style={{marginLeft:"30%",fontWeight:"600",fontSize:"30px"}}>Registration</p>
         
@@ -150,9 +150,6 @@ const SignUp  = ()=>{
             <p style={{fontFamily:"Raleway",marginLeft:"115px",fontSize:"17px"}}>
                 <Link to="/signin" style={{color:"grey",fontWeight:"600"}}>Already you have an account ?</Link>
             </p>
-             
-               
-         
             
     
         </div>

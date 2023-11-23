@@ -1,4 +1,5 @@
 export const sName = [
+    "Select State",
     "Andhra Pradesh ",
     "Arunachal Pradesh",
     "Assam",
@@ -30,6 +31,6 @@ export const sName = [
     "West Bengal",
   ];
 
-  export const bName = ["ME","CSE","EC","CE","IT","BBA","MBA","MCA","BCA","B Com"];
+  export const bName = ["Gender","Male","Female"];
 
   export const userType = ["Admin","Voter"];
