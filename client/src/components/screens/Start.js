@@ -28,7 +28,7 @@ function Start() {
             <h1>Vote, <span> </span></h1>
             <h1>For Your Better <span> </span></h1>
             <h1>Future <span> </span></h1>
-            <a href="#about" type="button" className="team">Portfolio</a>
+            <a href="#about" type="button" className="team">About Us</a>
           </div>
         </div>
       </section><br></br><br></br>
@@ -141,13 +141,13 @@ Chenchugari Jayadeep-21bce9238</h2>
           </div>
           <div className="social-icon">
             <div className="social-item">
-              <a href="https://www.instagram.com/dil_eep_004/"><img src="https://img.icons8.com/bubbles/100/000000/github.png" alt="" /></a>
+              <a href="https://github.com/SomnathAmbati"><img src="https://img.icons8.com/bubbles/100/000000/github.png" alt="" /></a>
             </div>
             <div className="social-item">
-              <a href="https://www.instagram.com/dil_eep_004/"><img src="https://img.icons8.com/bubbles/100/000000/instagram-new.png" alt="Instagram icon" /></a>
+              <a href="https://www.instagram.com//"><img src="https://img.icons8.com/bubbles/100/000000/instagram-new.png" alt="Instagram icon" /></a>
             </div>
             <div className="social-item">
-              <a href="https://www.linkedin.com/public-profile/settings"><img src="https://img.icons8.com/bubbles/100/000000/linkedin.png" alt="LinkedIn icon" /></a>
+              <a href="https://www.linkedin.com/in/somnath-ambati-179583218/"><img src="https://img.icons8.com/bubbles/100/000000/linkedin.png" alt="LinkedIn icon" /></a>
             </div>
           </div>
           <p>Copyright © Team305. All rights reserved</p>
