@@ -1,5 +1,6 @@
-module.exports ={
-    MONGO_URI:"mongodb+srv://somnathambati:i7Gy8Kbx9x5Sm3Se@cluster1.wzzye.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1",
-    JWT_SECRET:"MOHENMONDALJDFKFLL"
+require("dotenv").config(); // Load environment variables from .env file
 
-}
+module.exports = {
+    MONGO_URI: process.env.MONGO_URI,  // Fetch from environment variable
+    JWT_SECRET: process.env.JWT_SECRET // Fetch from environment variable
+};

@@ -1,6 +1,8 @@
 "use strict";
 
+require("dotenv").config(); // Load environment variables from .env file
+
 module.exports = {
-  MONGO_URI: "mongodb+srv://mahen:12345a@cluster0.qfgbe.mongodb.net/E-voting?retryWrites=true&w=majority",
-  JWT_SECRET: "MOHENMONDALJDFKFLL"
+    MONGO_URI: process.env.MONGO_URI,  // Fetch from environment variable
+    JWT_SECRET: process.env.JWT_SECRET // Fetch from environment variable
 };
