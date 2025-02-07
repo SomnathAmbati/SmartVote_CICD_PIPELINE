@@ -6,24 +6,33 @@ function Start() {
   const [candidates, setCandidates] = useState([]); // Define candidates state
 
   useEffect(() => {
-    // Fetch posts data from your backend API
-    axios.get('http://localhost:5000/allpost') // Use the correct endpoint
+    // Use AbortController to handle unmounting
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    axios.get('http://localhost:5000/allpost', { signal }) // Attach signal to request
       .then((response) => {
-        setCandidates(response.data.posts); // Update state with fetched data
+        if (!signal.aborted) {
+          setCandidates(response.data.posts);
+        }
       })
       .catch((error) => {
-        console.error('Error fetching candidates:', error);
+        if (error.name !== 'AbortError') {
+          console.error('Error fetching candidates:', error);
+        }
       });
+
+    // Cleanup function: Abort request when component unmounts
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   return (
     <>
-
       <section id="Home">
         <div className="Home container">
-          <div>
-            
-          </div>
+          <div></div>
           <div>
             <h1>Vote, <span> </span></h1>
             <h1>For Your Better <span> </span></h1>
@@ -31,55 +40,53 @@ function Start() {
             <a href="#about" type="button" className="team">About Us</a>
           </div>
         </div>
-      </section><br></br><br></br>
+      </section><br /><br />
+
       <section id="candidates" style={{ backgroundColor: '#f5f5f5', padding: '20px 0' }}>
-      <div className="candidates-container" style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <div className="candidates-header" style={{ textAlign: 'center', marginBottom: '30px' }}>
-          <h1 className="section-title" style={{ fontSize: '5em', color: '#333' }}>
-            Can<span style={{ color: '#e44d26' }}>didates</span>
-          </h1>
-        </div>
-        <div className="all-candidates" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
-          {candidates.map((candidate, index) => (
-            <div
-              className={`project-item ${index % 2 === 0 ? 'even' : 'odd'}`}
-              key={candidate._id}
-              style={{
-                width: '20%',
-                marginBottom: '100px',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                transition: 'transform 0.3s ease-in-out',
-                backgroundColor: index % 2 === 0 ? '#fff' : '#f9f9f9',
-                ':hover': { transform: 'scale(1.05)' },
-              }}
-            >
-              <div className="project-info" style={{ padding: '20px' }}>
-                <h1 style={{ fontSize: '1.5em', color: '#333' }}>{candidate.title}</h1>
-                {/* Add other information as needed */}
+        <div className="candidates-container" style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <div className="candidates-header" style={{ textAlign: 'center', marginBottom: '30px' }}>
+            <h1 className="section-title" style={{ fontSize: '5em', color: '#333' }}>
+              Can<span style={{ color: '#e44d26' }}>didates</span>
+            </h1>
+          </div>
+          <div className="all-candidates" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around' }}>
+            {candidates.map((candidate, index) => (
+              <div
+                className={`project-item ${index % 2 === 0 ? 'even' : 'odd'}`}
+                key={candidate._id}
+                style={{
+                  width: '20%',
+                  marginBottom: '100px',
+                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                  transition: 'transform 0.3s ease-in-out',
+                  backgroundColor: index % 2 === 0 ? '#fff' : '#f9f9f9',
+                }}
+              >
+                <div className="project-info" style={{ padding: '20px' }}>
+                  <h1 style={{ fontSize: '1.5em', color: '#333' }}>{candidate.title}</h1>
+                </div>
+                <div className="project-img">
+                  <img
+                    src={candidate.photo}
+                    alt={candidate.title}
+                    style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
+                  />
+                </div>
               </div>
-              <div className="project-img">
-                <img
-                  src={candidate.photo}
-                  alt={candidate.title}
-                  style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
-                />
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
       <section id="services">
         <div className="services container">
           <div className="service-top">
             <h1 className="section-title">Re<span>su</span>lts</h1>
-            <p> </p>
           </div>
           <div className="service-item">
             <div className="icon"><img src="https://img.icons8.com/bubbles/100/000000/services.png" alt="" /></div>
-            <h2 style={{textAlign: "center"}}>Results </h2>
-            <p style={{textAlign: "center"}}> Still Not Posted.....</p>
+            <h2 style={{ textAlign: "center" }}>Results </h2>
+            <p style={{ textAlign: "center" }}> Still Not Posted.....</p>
           </div>
         </div>
       </section>
@@ -92,13 +99,14 @@ function Start() {
             </div>
           </div>
           <div className="col-right">
-            <h1 className="section-title">About <span>us</span></h1><br></br><br></br><br></br>
-            <h2>Ambati somnath-21bce9501 <br></br><br></br>
-Devapatla Reddy Nithish Kumar-21BCE9054  <br></br><br></br>
-Sreeramjvp-21BCE9498 <br></br><br></br>
-Vadla Dileep-21bce9650 <br></br><br></br>
-Chenchugari Jayadeep-21bce9238</h2>
-            
+            <h1 className="section-title">About <span>us</span></h1><br /><br /><br />
+            <h2>
+              Ambati Somnath - 21BCE9501 <br /><br />
+              Devapatla Reddy Nithish Kumar - 21BCE9054  <br /><br />
+              Sreeram JVP - 21BCE9498 <br /><br />
+              Vadla Dileep - 21BCE9650 <br /><br />
+              Chenchugari Jayadeep - 21BCE9238
+            </h2>
           </div>
         </div>
       </section>
@@ -144,7 +152,7 @@ Chenchugari Jayadeep-21bce9238</h2>
               <a href="https://github.com/SomnathAmbati"><img src="https://img.icons8.com/bubbles/100/000000/github.png" alt="" /></a>
             </div>
             <div className="social-item">
-              <a href="https://www.instagram.com//"><img src="https://img.icons8.com/bubbles/100/000000/instagram-new.png" alt="Instagram icon" /></a>
+              <a href="https://www.instagram.com/"><img src="https://img.icons8.com/bubbles/100/000000/instagram-new.png" alt="Instagram icon" /></a>
             </div>
             <div className="social-item">
               <a href="https://www.linkedin.com/in/somnath-ambati-179583218/"><img src="https://img.icons8.com/bubbles/100/000000/linkedin.png" alt="LinkedIn icon" /></a>
