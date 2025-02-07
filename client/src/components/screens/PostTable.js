@@ -15,7 +15,7 @@ const PostTable = () => {
 
   const fetchPosts = () => {
     // Fetch all posts
-    axios.get('http://localhost:5000/allpost')
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/allpost`)
       .then(response => {
         setPosts(response.data.posts);
       })
@@ -29,7 +29,7 @@ const PostTable = () => {
 
   const handleCreatePost = () => {
     // Create a new post
-    axios.post('http://localhost:5000/createpost', newPost)
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/createpost`, newPost)
       .then(response => {
         setNewPost({ title: '', pic: '' });
         fetchPosts(); // Refresh the posts after creating a new one
@@ -42,7 +42,7 @@ const PostTable = () => {
     // Set the post id to be edited
     setEditingPostId(postId);
     // Fetch the post details to populate the editing form
-    axios.get(`http://localhost:5000/posts/${postId}`)
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/posts/${postId}`)
       .then(response => {
         const { title, pic } = response.data.post;
         // Provide default values if title or pic is missing
@@ -57,7 +57,7 @@ const PostTable = () => {
       return;
     }
 
-    axios.delete(`http://localhost:5000/deletepost/${postId}`, {
+    axios.delete(`${process.env.REACT_APP_BACKEND_URL}/deletepost/${postId}`, {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('jwt'), // Replace with your actual token
       },
@@ -75,7 +75,7 @@ const PostTable = () => {
   };
 
   const handleUpdatePost = () => {
-    axios.put(`http://localhost:5000/updatepost/${editingPostId}`, newPost, {
+    axios.put(`${process.env.REACT_APP_BACKEND_URL}/updatepost/${editingPostId}`, newPost, {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('jwt'), // Replace with your actual token
       },

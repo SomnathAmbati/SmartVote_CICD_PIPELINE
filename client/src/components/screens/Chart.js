@@ -24,7 +24,7 @@ const Chart = () => {
     )
 
     useEffect(()=>{
-        fetch('http://localhost:5000/allpost',{
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/allpost`,{
             headers:{
                 "Authorization":"Bearer "+localStorage.getItem("jwt")
             }

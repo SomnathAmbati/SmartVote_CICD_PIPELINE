@@ -6,7 +6,7 @@ const Posts  = ()=>{
     const [data,setData] = useState([])
   
     useEffect(()=>{
-       fetch('http://localhost:5000/posts',{
+       fetch(`${process.env.REACT_APP_BACKEND_URL}/posts`,{
          
        }).then(res=>res.json())
        .then(result=>{

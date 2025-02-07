@@ -9,7 +9,7 @@ const Home = () => {
   const { state } = useContext(UserContext);
 
   useEffect(() => {
-    fetch('http://localhost:5000/allpost', {
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/allpost`, {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('jwt'),
       },
@@ -30,7 +30,7 @@ const Home = () => {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        fetch('http://localhost:5000/vote', {
+        fetch(`${process.env.REACT_APP_BACKEND_URL}/vote`, {
           method: 'put',
           headers: {
             'Content-Type': 'application/json',

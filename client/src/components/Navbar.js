@@ -21,7 +21,7 @@ const NavBar = () => {
         <div>
           <Link to={state ? "/" : "/signin"} className="brand-logo center"
             style={{ color: "white", marginLeft: "6px", fontSize: "30px", textDecoration: "none", fontFamily: "Railway" }}>
-            Online Voting System
+            SmartVote Platform
           </Link>
         </div>
 
@@ -65,7 +65,6 @@ const NavBar = () => {
               {location.pathname === '/Start' && (
                 <div style={{ display: "grid",position: "relative", marginLeft: "-25%" }}>
                   <Link to="/signin" style={{ fontSize: "23px", fontWeight: "600", color: 'white', fontFamily: "Railway"}}>Login/Register</Link>
-
                 </div>
               )}
 

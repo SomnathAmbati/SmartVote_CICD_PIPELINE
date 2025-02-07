@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Start.css';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+console.log("Backend URL:", BACKEND_URL); // Should print http://localhost:5000
+
 
 function Start() {
   const [candidates, setCandidates] = useState([]); // Define candidates state
@@ -10,7 +13,8 @@ function Start() {
     const controller = new AbortController();
     const signal = controller.signal;
 
-    axios.get('http://localhost:5000/allpost', { signal }) // Attach signal to request
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/allpost`, { signal })
+ // Attach signal to request
       .then((response) => {
         if (!signal.aborted) {
           setCandidates(response.data.posts);

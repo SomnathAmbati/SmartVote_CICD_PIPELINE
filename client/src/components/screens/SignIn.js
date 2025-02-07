@@ -25,35 +25,32 @@ const SignIn = () => {
       M.toast({ html: "Invalid captcha", classes: "#c62828 red darken-3" });
       return;
     }
-
-    fetch("http://localhost:5000/signin", {
-      method: "post",
+    
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/signin`, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        password,
-        email,
-        userItem
+        email: email.trim(),
+        password: password.trim(),
+        userItem,
       }),
     })
-      .then((res) => res.json())
-      .then((data) => {
-        if (isMounted) {
-          if (data.error) {
-            M.toast({ html: data.error, classes: "#c62828 red darken-3" });
-          } else {
-            localStorage.setItem("jwt", data.token);
-            localStorage.setItem("user", JSON.stringify(data.user));
-            dispatch({ type: "USER", payload: data.user });
-            history.push("/");
-          }
-        }
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Something went wrong");
+    
+        localStorage.setItem("jwt", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        dispatch({ type: "USER", payload: data.user });
+        history.push("/");
       })
       .catch((err) => {
-        console.error('Fetch error:', err);
-        M.toast({ html: 'Failed to sign in. Please try again later.', classes: "#c62828 red darken-3" });
+        console.error("Fetch error:", err);
+        M.toast({ html: err.message, classes: "#c62828 red darken-3" });
       });
+    
   }
 
   useEffect(() => {
