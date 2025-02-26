@@ -1,4 +1,4 @@
-# Online_Voting_System
+# SmartVote
 How to run this project 
 1.the use npm start command from your terminal
 2.go to client directory and used npm start command
