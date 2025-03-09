@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-service
+  name: backend
 spec:
   replicas: 2
   selector:
@@ -20,8 +20,8 @@ spec:
           env:
             - name: MONGO_URI
               valueFrom:
-                configMapKeyRef:
-                  name: app-config
+                secretKeyRef:
+                  name: app-secrets
                   key: MONGO_URI
             - name: JWT_SECRET
               valueFrom:
@@ -38,7 +38,7 @@ spec:
     app: backend
   ports:
     - protocol: TCP
-      port: 5000        # Internal Cluster Port
-      targetPort: 5000  # Port inside the container
-      nodePort: 32001   # External Port (30000-32767)
+      port: 5000
+      targetPort: 5000
+      nodePort: 32001
   type: NodePort

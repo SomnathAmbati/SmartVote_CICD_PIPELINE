@@ -17,6 +17,12 @@ spec:
           image: somnathambati/smartvote_frontend:latest
           ports:
             - containerPort: 3000
+          env:
+            - name: REACT_APP_BACKEND_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend-config
+                  key: REACT_APP_BACKEND_URL
 ---
 apiVersion: v1
 kind: Service
@@ -27,7 +33,7 @@ spec:
     app: frontend
   ports:
     - protocol: TCP
-      port: 80        # Internal Cluster Port
-      targetPort: 3000 # Port inside the container
-      nodePort: 32000  # Exposed Port (must be in 30000-32767 range)
+      port: 80
+      targetPort: 3000
+      nodePort: 32000
   type: NodePort
