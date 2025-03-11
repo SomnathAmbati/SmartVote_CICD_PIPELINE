@@ -12,6 +12,10 @@ spec:
       labels:
         app: backend
     spec:
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
       containers:
         - name: backend
           image: somnathambati/smartvote_backend:latest
