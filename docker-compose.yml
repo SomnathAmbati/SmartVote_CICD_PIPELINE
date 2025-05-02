@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  backend:
+    image: somnathambati/smartvote_backend:latest
+    container_name: smartvote-backend
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
+    networks:
+      - smartvote-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    image: somnathambati/smartvote_frontend:latest
+    container_name: smartvote-frontend
+    restart: always
+    environment:
+      - REACT_APP_API_URL=${PUBLIC_API_URL}
+    depends_on:
+      - backend
+    networks:
+      - smartvote-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: smartvote-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - smartvote-network
+
+networks:
+  smartvote-network:
+    driver: bridge
