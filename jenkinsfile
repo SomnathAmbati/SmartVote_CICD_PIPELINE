@@ -1,0 +1,106 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_HUB_USER = 'somnathambati'
+        FRONTEND_IMAGE = 'smartvote_frontend'
+        BACKEND_IMAGE = 'smartvote_backend'
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                git credentialsId: 'Git_Cred', branch: 'main', url: 'https://github.com/SomnathAmbati/SmartVote_CICD_PIPELINE.git'
+            }
+        }
+
+        stage('Build & Push Docker Images') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'Docker_Cred', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS'),
+                                 string(credentialsId: 'EC2_PUBLIC_IP', variable: 'EC2_PUBLIC_IP')]) {
+                    script {
+                        // Build Docker images and pass REACT_APP_BACKEND_URL as build argument
+                        sh '''
+                            echo "🔧 Building Backend Image..."
+                            docker build -t $DOCKER_HUB_USER/$BACKEND_IMAGE:latest -f Dockerfile.backend .
+
+                            echo "🔧 Building Frontend Image..."
+                            docker build -t $DOCKER_HUB_USER/$FRONTEND_IMAGE:latest -f client/Dockerfile.frontend client/ --build-arg REACT_APP_BACKEND_URL=http://${EC2_PUBLIC_IP}:5000
+
+                            echo "🔐 Logging in to Docker Hub..."
+                            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+
+                            echo "📤 Pushing Docker Images..."
+                            docker push $DOCKER_HUB_USER/$BACKEND_IMAGE:latest
+                            docker push $DOCKER_HUB_USER/$FRONTEND_IMAGE:latest
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to EC2 Instance') {
+            steps {
+                withCredentials([
+                    file(credentialsId: 'ec2_ssh_key', variable: 'EC2_KEY'),
+                    string(credentialsId: 'EC2_PUBLIC_IP', variable: 'EC2_IP'),
+                    string(credentialsId: 'MONGO_URI', variable: 'MONGO_URI'),
+                    string(credentialsId: 'JWT_SECRET', variable: 'JWT_SECRET')
+                ]) {
+                    script {
+                        def PUBLIC_API_URL = "http://${env.EC2_IP}:5000"
+                        def ssh_cmd = "ssh -o StrictHostKeyChecking=no -i ${env.EC2_KEY} ec2-user@${env.EC2_IP}"
+
+                        sh """
+                            echo "📡 Connecting to EC2 and deploying application..."
+
+                            $ssh_cmd << 'EOF'
+                            set -e
+
+                            echo "📁 Navigating to SmartVote directory..."
+                            mkdir -p ~/smartvote && cd ~/smartvote
+
+                            if [ ! -d .git ]; then
+                                git clone https://github.com/SomnathAmbati/SmartVote_CICD_PIPELINE.git .
+                            else
+                                git pull origin main
+                            fi
+
+                            echo "🌍 Creating .env file..."
+                            cat > .env <<EOV
+MONGO_URI=${MONGO_URI}
+JWT_SECRET=${JWT_SECRET}
+PUBLIC_API_URL=${PUBLIC_API_URL}
+EOV
+
+                            echo "🧼 Cleaning old containers..."
+                            docker-compose --env-file .env down || echo "Down failed"
+
+                            echo "📦 Pulling new images..."
+                            docker pull $DOCKER_HUB_USER/$BACKEND_IMAGE:latest
+                            docker pull $DOCKER_HUB_USER/$FRONTEND_IMAGE:latest
+
+                            echo "🚀 Starting containers..."
+                            docker-compose --env-file .env up -d --build
+
+                            echo "✅ Deployment Complete!"
+EOF
+                        """
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Pipeline completed successfully!'
+        }
+        failure {
+            echo '❌ Deployment Failed. Check console output for errors.'
+        }
+        always {
+            cleanWs()
+        }
+    }
+}
