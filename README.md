@@ -132,3 +132,5 @@ cat .env
 
 ## Conclusion
 This pipeline automates the process of building, testing, and deploying the SmartVote application using Jenkins, Docker, and EC2. By integrating these tools, we ensure a robust CI/CD pipeline for seamless deployment and updates.
+
+Once the deployment is complete, you can **access the SmartVote web application** by visiting: **http://<EC2_PUBLIC_IP>/9090**
