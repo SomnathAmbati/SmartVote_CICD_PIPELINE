@@ -20,13 +20,14 @@ services:
       retries: 3
 
   nginx:
-    image: somnathambati/smartvote_frontend:latest  # This includes built React + nginx
+    image: somnathambati/smartvote_frontend:latest
     container_name: smartvote-nginx
     restart: always
     ports:
       - "9090:80"
     depends_on:
       - backend
+    command: ["sh", "-c", "until curl -s http://smartvote-backend:5000/api/health; do echo waiting for backend; sleep 2; done; nginx -g 'daemon off;'"]
     networks:
       - smartvote-network
 
