@@ -7,7 +7,10 @@ WORKDIR /app
 ARG REACT_APP_API_URL
 
 # Set it as an environment variable (only available during build)
-ENV REACT_APP_API_URL=$REACT_APP_API_URL
+ENV REACT_APP_BACKEND_URL=$REACT_APP_API_URL
+
+# Create .env file explicitly
+RUN echo "REACT_APP_BACKEND_URL=$REACT_APP_API_URL" > .env
 
 # Copy dependencies and install
 COPY package.json package-lock.json ./
