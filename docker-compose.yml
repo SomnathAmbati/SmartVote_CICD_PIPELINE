@@ -26,7 +26,7 @@ services:
     ports:
       - "9090:80"
     environment:
-      - REACT_APP_BACKEND_URL=http://52.66.201.195:5000
+      - REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL
     depends_on:
       - backend
     command: ["sh", "-c", "until curl -s http://smartvote-backend:5000/api/health; do echo waiting for backend; sleep 2; done; nginx -g 'daemon off;'"]
