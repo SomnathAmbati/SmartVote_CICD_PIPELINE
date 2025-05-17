@@ -13,6 +13,27 @@ pipeline {
                 git credentialsId: 'Git_Cred', branch: 'main', url: 'https://github.com/SomnathAmbati/SmartVote_CICD_PIPELINE.git'
             }
         }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh '''
+                        echo "📊 Running SonarQube Analysis..."
+                        /opt/sonar-scanner/bin/sonar-scanner \
+                          -Dsonar.projectKey=SmartVote \
+                          -Dsonar.sources=. \
+                          -Dsonar.exclusions=client/**,node_modules/**
+                    '''
+                }
+            }
+        }
+        
+        // stage('Quality Gate') {
+        //     steps {
+        //         timeout(time: 2, unit: 'MINUTES') {
+        //             waitForQualityGate abortPipeline: true
+        //         }
+        //     }
+        // }
 
         stage('Build & Push Docker Images') {
             steps {

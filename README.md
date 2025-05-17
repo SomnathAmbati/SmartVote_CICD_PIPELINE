@@ -24,6 +24,8 @@ Before you proceed, make sure you have the following:
 - SSH Key: A key pair for SSH access to your EC2 instance.
 - MongoDB URI: MongoDB connection string (e.g., hosted MongoDB instance).
 - JWT_SECRET: A secret for signing JWT tokens for authentication.
+- SonarQube Server: Accessible SonarQube instance for code quality analysis.
+
 
 ## Setup
 ### 1. Clone the Repository
@@ -47,11 +49,15 @@ The pipeline is structured to perform the following steps:
 
 1. Checkout Code: Pulls the latest code from the repository.
 
-2. Build & Push Docker Images:
+2. Run SonarQube Analysis ✅
+   - Static code analysis on both frontend and backend
+   - Quality gates applied
+
+3. Build & Push Docker Images:
    - Builds the frontend and backend Docker images.
    - Pushes the built images to Docker Hub.
 
-3. Deploy to EC2 Instance:
+4. Deploy to EC2 Instance:
    - SSH into the EC2 instance.
    - Pulls the Docker images from Docker Hub.
    - Sets up necessary environment variables in .env.
@@ -67,6 +73,7 @@ The following environment variables must be set for both the backend and fronten
 
 The .env file is dynamically generated on the EC2 instance using the pipeline.
 
+
 ### 2. Configure Jenkins
 Ensure that Jenkins is set up with the following credentials:
 
@@ -75,6 +82,7 @@ Ensure that Jenkins is set up with the following credentials:
 - EC2 SSH Key (ec2_ssh_key)
 - MongoDB URI (MONGO_URI)
 - JWT Secret (JWT_SECRET)
+- SonarQube Server Authentication Token (SONAR_TOKEN)
   
 The credentials listed above are securely managed within Jenkins using Jenkins Credentials Plugin. This ensures that sensitive information such as your MongoDB URI, JWT Secret, EC2 SSH Key, and Docker Hub credentials are never exposed in your Jenkins pipeline scripts or logs.
 
@@ -82,6 +90,7 @@ The credentials listed above are securely managed within Jenkins using Jenkins C
 Create a Jenkins pipeline job that uses the Jenkinsfile found in this repository. The pipeline will automatically:
 
 - Pull the latest code.
+- Run SonarQube analysis ✅
 - Build and push Docker images.
 - Deploy the application to EC2.
 
@@ -92,13 +101,27 @@ Ensure your EC2 instance is ready for deployment:
 - SSH access should be available with the private key.
 
 ### 5. Access the Application
-Once deployed, the application will be accessible at http://<EC2-IP>:80.
+Once deployed, the application will be accessible at http://<EC2-IP>:9090.
+
+### 6. SonarQube Integration
+   - The SmartVote project integrates SonarQube into the CI pipeline to ensure automated checks for code quality, security, and maintainability on every commit.
+
+   #### SonarQube helps monitor:
+      - Code smells
+      - Bugs
+      - Vulnerabilities
+      - Code coverage
+      - Duplicated code
+      Note: Code coverage reports can be improved by adding test scripts and integrating them into the pipeline.
+
+
 
 ## How It Works
 ### CI Pipeline:
 - The Jenkins pipeline builds the frontend and backend Docker images.
 - The REACT_APP_BACKEND_URL is dynamically set using the EC2 public IP during the pipeline run.
 - Images are then pushed to Docker Hub.
+- Runs SonarQube analysis.
 
 ### CD Pipeline:
 - The EC2 instance fetches the latest Docker images.
@@ -131,9 +154,9 @@ cat .env
 ```
 
 ## Conclusion
-This pipeline automates the process of building, testing, and deploying the SmartVote application using Jenkins, Docker, and EC2. By integrating these tools, we ensure a robust CI/CD pipeline for seamless deployment and updates.
+This CI/CD pipeline ensures automated building, testing (SonarQube analysis), and deployment of the SmartVote app with minimal manual intervention. With this setup, any change pushed to the repository triggers a full deployment cycle, ensuring fast delivery and high code quality.
 
-Once the deployment is complete, you can **access the SmartVote web application** by visiting: **http://<EC2_PUBLIC_IP>/9090**
+🚀 Application is live at: http://<EC2_PUBLIC_IP>:9090
 
 **Frontend** -
 ![image](https://github.com/user-attachments/assets/e482ee92-56b6-4a29-b8fe-76137222c005)
