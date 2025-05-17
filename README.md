@@ -114,6 +114,8 @@ Once deployed, the application will be accessible at http://<EC2-IP>:9090.
       - Duplicated code
       Note: Code coverage reports can be improved by adding test scripts and integrating them into the pipeline.
 
+   ![WhatsApp Image 2025-05-17 at 22 55 24_c8912aa9](https://github.com/user-attachments/assets/0e0c1110-f14e-4ee5-89a7-e17b82423f7d)
+
 
 
 ## How It Works
@@ -152,6 +154,9 @@ docker restart smartvote-backend
 # Check environment variables
 cat .env
 ```
+
+![WhatsApp Image 2025-05-17 at 23 11 43_6b67bd04](https://github.com/user-attachments/assets/3f4a8e2e-8e5e-4720-852c-e9a4561b4485)
+
 
 ## Conclusion
 This CI/CD pipeline ensures automated building, testing (SonarQube analysis), and deployment of the SmartVote app with minimal manual intervention. With this setup, any change pushed to the repository triggers a full deployment cycle, ensuring fast delivery and high code quality.
